@@ -1,8 +1,8 @@
 // "use strict";
 var data   = [],
-	mass   = 5.972*Math.pow(10,24), // in kg
-	scale  = 384400000, // in meters
-	radius = 6371000, //in meters
+	Mearth   = 5.972*Math.pow(10,24), // in kg
+	scale  = 384400000*2.3, // in meters
+	radius = 20*6371000, //in meters
 	G      = -6.67*Math.pow(10,-11), //m^3/(kg s^2)
 	w      = document.body.scrollWidth,
 	h      = document.body.scrollHeight,
@@ -11,7 +11,17 @@ var data   = [],
 	canvas = d3.select("#canvas"), 
 	svg    = canvas.append("svg:svg");
 
-w_scale    = d3.scale.linear()
+mass = 7.34767309 *Math.pow(10,22)
+
+r = new vector([0,0])
+data.push({r:r,v:r,m:Mearth,radius:radius})
+
+r = new vector([0,384400000])
+v = new vector([1045,0])
+data.push({r:r,v:v,m:mass,radius:radius})
+
+
+w_scale    = d3.scale.linear() 
 	.range([-w/h*scale, w/h*scale])
 	.domain([0, w]);
 
@@ -22,18 +32,27 @@ h_scale = d3.scale.linear()
 svg.attr("width", w)
    .attr("height", h)
    .attr('id','space')
-   .style("background-color",'#222')
+   .style("background-color", '#222')
    .style("pointer-events", "all")
    .on("click",add_data) 
+
+svg.selectAll("circle")
+		.data(data)
+		.enter()
+		.append("circle")
+		.attr("cx",function(d){return(w_scale.invert(d.r.x))})
+		.attr("cy",function(d){return(h_scale.invert(d.r.y))}) 
+		.attr("r",20)
+		.attr("fill",function(){return('#'+Math.floor(Math.random()*16777215).toString(16))});
+
 
 function add_data(){ 
 	//get mouse coordinates and convert to graph coordinates
 	var m = d3.mouse(this);
 	x = w_scale(m[0])
 	y = h_scale(m[1])
-	r = new vector([x,y]) //in meters
+	r = new vector([x,y]) //in meters  
 	v = randomVector(2).scale(1000)  //in m/s
-    v = new vector([0,0]) 
 	data.push({r:r,v:v,m:mass,radius:radius})
 
 	svg.selectAll("circle")
@@ -42,12 +61,12 @@ function add_data(){
 		.append("circle")
 		.attr("cx",function(d){return(w_scale.invert(d.r.x))})
 		.attr("cy",function(d){return(h_scale.invert(d.r.y))}) 
-		.attr("r",10)
-		.attr("fill","#7fffd4");
+		.attr("r",20)
+		.attr("fill",function(){return('#'+Math.floor(Math.random()*16777215).toString(16))});
 }
 
 update_position = function (){
-	var h = 1000.;
+	var h = 10000.;
 	for (var i = data.length - 1; i >= 0; i--){
 		d   = data[i]
 		k1 = gravityAcceleration(d.r,i)
@@ -79,32 +98,15 @@ function gravityAcceleration(r,index)
 				var    m2 = data[i].m,
 				    av = dr.norm().scale(G*m2/(Math.pow(dr.magnitude(),2)));
                 
-				a = a.add(av)
-                                    
-                }
-			};
+				a = a.add(av)             
+                } 
+			}; 
 		};
         return(a)
-		return(pauliAcceleration(a,r,index));
-	};
-
-function pauliAcceleration(a,r,index)
-	{
-		for (var i = data.length - 1; i >= 0; i--) {
-			if (i != index)
-			{
-				var r2 = data[i].r,
-				    dr = r.subtract(r2),
-				    av = dr.norm().scale(A/(Math.pow(dr.magnitude()-(mpp*20)/1.3,5)));
-                
-				a  = a.add(av)
-			};
-		};
-		return(a);
 	};
 
 
-n   = 25;
+n   = 35;
 vectorData = []
 for (var i = n - 1; i >= 0; i--)
 {
@@ -112,7 +114,7 @@ for (var i = n - 1; i >= 0; i--)
     {
         origin = new vector([w_scale((i/n+1/(2*n))*w),h_scale((j/n+1/(2*n))*h)])
         v = new vector([0,0])
-        vectorData.push({origin:origin,vec:v})
+        vectorData.push({origin:origin,vec:v}) 
     };
 };
 
@@ -124,7 +126,8 @@ svg.selectAll("line")
     .attr("y1",function(d){return(h_scale.invert(d.origin.y))})
     .attr("x2",function(d){return(w_scale.invert(d.origin.x+d.vec.x))})
     .attr("y2",function(d){return(h_scale.invert(d.origin.y+d.vec.y))})
-    .attr("stroke",'teal');
+    .attr("stroke",'teal')
+    .attr("stroke-width",'1');
 
 function updateField()
 {
@@ -135,8 +138,8 @@ function updateField()
     };
     
     svg.selectAll("line")
-        .attr("x2",function(d){return(w_scale.invert(d.origin.x+d.vec.x*30000000))})
-        .attr("y2",function(d){return(h_scale.invert(d.origin.y+d.vec.y*30000000))})
+        .attr("x2",function(d){return(w_scale.invert(d.origin.x+d.vec.x*600000000))})
+        .attr("y2",function(d){return(h_scale.invert(d.origin.y+d.vec.y*600000000))})
 };
 
 update_position()
