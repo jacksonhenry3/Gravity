@@ -1,13 +1,14 @@
 // "use strict";
 var data   = [],
-	mass   = 5.972 *Math.pow(10,24), // in kg
+	mass   = 5.972*Math.pow(10,24), // in kg
 	scale  = 384400000, // in meters
 	radius = 6371000, //in meters
 	G      = -6.67*Math.pow(10,-11), //m^3/(kg s^2)
 	w      = document.body.scrollWidth,
 	h      = document.body.scrollHeight,
+    A      = Math.pow(10,35), //Pauli scaling factor
 	mpp    = 2*scale/h, // meters per pixel
-	canvas = d3.select("#canvas"),
+	canvas = d3.select("#canvas"), 
 	svg    = canvas.append("svg:svg");
 
 w_scale    = d3.scale.linear()
@@ -22,17 +23,16 @@ svg.attr("width", w)
    .attr("height", h)
    .style("background-color",'#222')
    .style("pointer-events", "all")
-   .on("click",add_data)
+   .on("click",add_data) 
 
-
-function add_data(){
+function add_data(){ 
 	//get mouse coordinates and convert to graph coordinates
 	var m = d3.mouse(this);
 	x = w_scale(m[0])
 	y = h_scale(m[1])
 	r = new vector([x,y]) //in meters
-	v = randomVector(2).scale(5000)  //in m/s
-	v = new vector([0,0])
+	v = randomVector(2).scale(1000)  //in m/s
+    v = new vector([0,0]) 
 	data.push({r:r,v:v,m:mass,radius:radius})
 
 	svg.selectAll("circle")
@@ -60,39 +60,39 @@ update_position = function (){
 	svg.selectAll("circle")
 		.attr('cx',function(d){return(w_scale.invert(d.r.x))})
 		.attr('cy',function(d){return(h_scale.invert(d.r.y))})
+    window.requestAnimationFrame(update_position);
 };
 
 function gravityAcceleration(r,index)
 	{
-		Gaccel = new vector([0,0])
+		var a = new vector([0,0]);
 		for (var i = data.length - 1; i >= 0; i--) {
 			if (i != index)
 			{
-				r2 = data[i].r
-				dr = r.subtract(r2)
-				m2 = data[i].m
-				forceVector = dr.norm().scale(G*m2/(Math.pow(dr.magnitude(),2)))
-				Gaccel = Gaccel.add(forceVector)
+				var r2 = data[i].r,
+				    dr = r.subtract(r2),
+				    m2 = data[i].m,
+				    av = dr.norm().scale(G*m2/(Math.pow(dr.magnitude(),2)));
+                
+				a = a.add(av)
 			};
 		};
-		a = new vector([0,0])
-		return(pauli(a,r,index));
+		return(pauliAcceleration(a,r,index));
 	};
 
-
-function pauli(totalForce,r,index)
+function pauliAcceleration(a,r,index)
 	{
 		for (var i = data.length - 1; i >= 0; i--) {
 			if (i != index)
 			{
-				r2 = data[i].r
-				dr = r.subtract(r2)
-				totalForce = totalForce.add(dr.norm().scale(100000000/Math.pow(dr.magnitude(),10)))
+				var r2 = data[i].r,
+				    dr = r.subtract(r2),
+				    av = dr.norm().scale(A/(Math.pow(dr.magnitude()-(mpp*20)/1.3,5)));
+                
+				a  = a.add(av)
 			};
 		};
+		return(a);
+	};
 
-		console.log(totalForce)
-		return(totalForce)
-	}
-
-setInterval(update_position,1);
+update_position()
