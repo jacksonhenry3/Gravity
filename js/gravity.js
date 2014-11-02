@@ -3,7 +3,7 @@ var data   = [],
 	scale  = 1.5*38440000,
 	scale = 10,
 	G      = -6.67*Math.pow(10,-11),
-	G = -.000001,
+	G = -.00001,
 	canvas = d3.select("#canvas"),
 	w      = document.body.scrollWidth,
 	h      = document.body.scrollHeight,
@@ -23,11 +23,11 @@ svg.attr("width", w)
    .style("pointer-events", "all")
    .on("click",add_data)
 
-for (var i = 4 - 1; i >= 0; i--) {
-	for (var j = 4- 1; j >= 0; j--) {
-		data.push({r:{x:w_scale((i/4+1/8)*w),y:h_scale((j/4+1/8)*h)},v:{x:0,y:0},m:1,radius :20})
-	};
-};
+// for (var i = 4 - 1; i >= 0; i--) {
+// 	for (var j = 4- 1; j >= 0; j--) {
+// 		data.push({r:{x:w_scale((i/4+1/8)*w),y:h_scale((j/4+1/8)*h)},v:{x:0,y:0},m:1,radius :20})
+// 	};
+// };
 
 	svg.selectAll("circle")
 		.data(data)
@@ -45,9 +45,11 @@ function add_data(){
 	var m = d3.mouse(this);
 	m[0]  = w_scale(m[0]);
 	m[1]  = h_scale(m[1]);
-
+	a = (Math.random()-.5)/100
+	b = (Math.random()-.5)/100
+	// console.log(a)
 	//add new point to data
-	data.push({r:{x:m[0],y:m[1]},v:{x:0,y:0},m:1,radius :20})
+	data.push({r:{x:m[0],y:m[1]},v:{x:a,y:b},m:1,radius :5})
 
 
 	svg.selectAll("circle")
@@ -63,13 +65,15 @@ function add_data(){
 update_position = function (){
 	//in seconds (becouse set interval is 1 ms)
 	
-	var dt = 4;
+	var dt = 1;
 	for (var i = data.length - 1; i >= 0; i--){
 		d   = data[i]
 		F   = gravity(d.r.x,d.r.y,d.m,i)
 		a   = {x:F.x/d.m,       y:F.y/d.m}
 		d.v = {x:a.x*dt+d.v.x,  y:a.y*dt+d.v.y}
 		d.r = {x:(d.v.x*dt+d.r.x),y:(d.v.y*dt+d.r.y)}
+		
+
 	};
 
 	svg.selectAll("circle")
@@ -113,9 +117,7 @@ function pauli(totalForce,x,y,m1,index)
 				totalForce.y+=.000000001/Math.pow(rsq,5)*dy/Math.sqrt(rsq)
 			};
 		};
-// console.log(totalForce)
 		return(totalForce)
-
 	}
 
 setInterval(update_position,1);
