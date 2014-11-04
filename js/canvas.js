@@ -1,10 +1,9 @@
 var w      = document.body.scrollWidth,
 	h      = document.body.scrollHeight,
-	scale  = 384400000*1.1;
+	scale  = 1.5*Math.pow(10,11);
 	mpp    = scale/h, // meters per pixel
 	canvas = d3.select("#canvas"), 
 	svg    = canvas.append("svg:svg"),
-	
 
 svg.attr("width", w)
    .attr("height", h)
@@ -28,8 +27,9 @@ function add_data(argument) {
 		y = h_scale(m[1])
 		r = new vector([x,y]) //in meters  
 		v = randomVector(2).scale(2000)  //in m/s
-		v = new vector([0,20000])
+		v = new vector([0,10000])
 		mass = 5.972*Math.pow(10,24)
+		mass = 1.989*Math.pow(10,30)
 	b = new body(r,v,mass,6371000,1)
 	data.push(b)
 	draw()
@@ -44,8 +44,8 @@ function draw()
 		.append("circle")
 		.attr("cx",function(d){return(w_scale.invert(d.r.x))})
 		.attr("cy",function(d){return(h_scale.invert(d.r.y))}) 
-		.attr("r",function(d){return(d.radius/mpp)})
-		.attr("fill",function(){return('#'+Math.floor(Math.random()*16777215).toString(16))});
+		.attr("r",function(d){return(d.radius/mpp*20)})
+		.attr("fill",function(){return('#fff')});
 }
 
 function repaint()

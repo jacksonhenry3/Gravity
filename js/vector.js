@@ -2,6 +2,7 @@ function vector (vals) {
 	this.length = 2;
 	this.x      = vals[0];
 	this.y      = vals[1];
+	this.vals   = vals
 
 	if (vals.length === 3)
 	{

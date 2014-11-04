@@ -1,11 +1,11 @@
 var G          = -6.67*Math.pow(10,-11), //m^3/(kg s^2)
-	 mass       = 7.34767309 *Math.pow(10,22),
+	 mass       = 7.34767309 *Math.pow(10,22), // kg
 	 Speedmax   = 1000, //in m/s
 	 properTime = 0;
 
 function update_position(data)
 {
-	var h = .001;
+	var h = 5000;
 	for (var i = data.length - 1; i >= 0; i--){
 		var d   = data[i],
 			k1  = gravityAcceleration(d.r,i),
