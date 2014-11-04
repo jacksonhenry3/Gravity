@@ -111,3 +111,13 @@ function randomVector(dim)
 	}
 	return(rv)
 };
+
+function zeroVector(dim)
+{
+	var v = new vector([0,0]);
+	if (dim === 3)
+	{
+		v = new vector([0,0,0])
+	};
+	return(v)
+}
