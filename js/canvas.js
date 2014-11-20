@@ -1,6 +1,7 @@
 var w      = document.body.scrollWidth,
 	h      = document.body.scrollHeight,
 	scale  = 1.5*Math.pow(10,11);
+	scale = Math.pow(10,9)*5
 	mpp    = scale/h, // meters per pixel
 	canvas = d3.select("#canvas"), 
 	svg    = canvas.append("svg:svg"),
@@ -26,8 +27,8 @@ function add_data(argument) {
 		x = w_scale(m[0])
 		y = h_scale(m[1])
 		r = new vector([x,y]) //in meters  
-		v = randomVector(2).scale(2000)  //in m/s
-		v = new vector([0,10000])
+		v = randomVector(2).scale(200000)  //in m/s
+		// v = new vector([0,10000])
 		mass = 5.972*Math.pow(10,24)
 		mass = 1.989*Math.pow(10,30)
 	b = new body(r,v,mass,6371000,1)
