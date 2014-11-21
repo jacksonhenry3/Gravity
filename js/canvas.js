@@ -44,7 +44,7 @@ function draw()
 		.append("circle")
 		.attr("cx",function(d){return(w_scale.invert(d.r.x))})
 		.attr("cy",function(d){return(h_scale.invert(d.r.y))}) 
-		.attr("r",function(d){return(d.radius/mpp)})
+		.attr("r",function(d){return(3)})
 		.attr("fill",function(){return('#fff')});
 }
 
