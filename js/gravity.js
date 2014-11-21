@@ -1,4 +1,4 @@
-var G          = -6.67*Math.pow(10,-11), //m^3/(kg s^2)
+var  G          = -6.67*Math.pow(10,-11), //m^3/(kg s^2)
 	 mass       = 7.34767309 *Math.pow(10,22), // kg
 	 Speedmax   = 1000, //in m/s
 	 properTime = 0;
@@ -36,3 +36,13 @@ function gravityAcceleration(r,index)
 	};
    return(a)
 };
+
+function potential (r,data) {
+	p = 0
+	for (var i = data.length - 1; i >= 0; i--) {
+		d = data[i]
+		p=p+d.m/(d.r.subtract(r).magnitude())
+	};
+	p*=G
+	return(p)
+}

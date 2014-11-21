@@ -1,7 +1,7 @@
 var w      = document.body.scrollWidth,
 	h      = document.body.scrollHeight,
 	scale  = 1.5*Math.pow(10,11);
-	scale = Math.pow(10,9)*5
+	scale = 150*Math.pow(10,9)
 	mpp    = scale/h, // meters per pixel
 	canvas = d3.select("#canvas"), 
 	svg    = canvas.append("svg:svg"),
@@ -51,7 +51,20 @@ function draw()
 
 function repaint()
 {
+	svg.selectAll("rect")
+        .style('fill',function(d){return('rgb(0,0,'+Math.round(potential(d.origin,data)/-50000000)+')')});
+        
 	svg.selectAll("circle")
 	   .attr('cx',function(d){return(w_scale.invert(d.r.x))})
 	   .attr('cy',function(d){return(h_scale.invert(d.r.y))})
 }
+
+
+
+// function potential (n) {
+// 	for (var x = n - 1; x >= 0; x--) {
+// 		for (var y = n - 1; y >= 0; y--) {
+			
+// 		};
+// 	};
+// }
