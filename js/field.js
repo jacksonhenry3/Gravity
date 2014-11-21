@@ -1,4 +1,4 @@
-var n      = 50,
+var n      = 20,
     width  = w/(n-2),
     height = h/(n-2);
 

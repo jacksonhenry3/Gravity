@@ -1,7 +1,6 @@
 var w      = document.body.scrollWidth,
 	h      = document.body.scrollHeight,
-	scale  = 1.5*Math.pow(10,11);
-	scale = 150*Math.pow(10,9)
+	scale = 5000*Math.pow(10,9)
 	mpp    = scale/h, // meters per pixel
 	canvas = d3.select("#canvas"), 
 	svg    = canvas.append("svg:svg"),
@@ -45,7 +44,7 @@ function draw()
 		.append("circle")
 		.attr("cx",function(d){return(w_scale.invert(d.r.x))})
 		.attr("cy",function(d){return(h_scale.invert(d.r.y))}) 
-		.attr("r",function(d){return(d.radius/mpp*20)})
+		.attr("r",function(d){return(d.radius/mpp)})
 		.attr("fill",function(){return('#fff')});
 }
 
