@@ -1,5 +1,5 @@
-var w      = document.body.scrollWidth,
-	h      = document.body.scrollHeight,
+var w      = window.innerWidth,
+	h      = window.innerHeight,
 	scale = 5000*Math.pow(10,9),
 	mpp    = scale/h, // meters per pixel
 	canvas = d3.select("#canvas"), 
