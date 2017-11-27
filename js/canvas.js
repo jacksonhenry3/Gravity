@@ -1,9 +1,9 @@
 var w      = document.body.scrollWidth,
 	h      = document.body.scrollHeight,
-	scale = 5000*Math.pow(10,9)
+	scale = 5000*Math.pow(10,9),
 	mpp    = scale/h, // meters per pixel
 	canvas = d3.select("#canvas"), 
-	svg    = canvas.append("svg:svg"),
+	svg    = canvas.append("svg:svg");
 
 svg.attr("width", w)
    .attr("height", h)
