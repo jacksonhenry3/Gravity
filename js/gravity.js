@@ -5,7 +5,7 @@ var  G          = -6.67*Math.pow(10,-11), //m^3/(kg s^2)
 
 function update_position(data)
 {
-	var h = 10000;
+	var h = 100000;
 	for (var i = data.length - 1; i >= 0; i--){
 		var d   = data[i],
 			k1  = gravityAcceleration(d.r,i),
